@@ -1,5 +1,6 @@
 import logging
 
+import numpy as np
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
@@ -8,7 +9,7 @@ from transformers import AdamW, get_linear_schedule_with_warmup
 import utils.generation_trie as gt
 from data.TestDataset import TestDataset
 from processor.Collator import Collator, TestCollator
-from utils import utils
+from utils import utils, evaluate
 
 
 class SingleRunner:
@@ -168,7 +169,6 @@ class SingleRunner:
                     self.model.eval()
                     self.test()
 
-            dist.barrier()
         if self.valid_select > 0:
             if self.rank == 0:
                 logging.info(f"The best validation at Epoch {best_epoch}")
@@ -217,7 +217,7 @@ class SingleRunner:
         if self.args.optim.lower() == 'adamw':
             optimizer = AdamW(optimizer_grouped_parameters, lr=self.args.lr, eps=self.args.adam_eps)
         else:
-            raise NotImplementError
+            raise NotImplemented
         scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, total_steps)
 
         return optimizer, scheduler

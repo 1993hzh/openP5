@@ -84,7 +84,7 @@ def single_main():
     
     args.rank = 0
     
-    device = torch.device("cpu", int(args.gpu.split(',')[0]))
+    device = torch.device("mps", int(args.gpu.split(',')[0]))
     
     
     logging.info(vars(args))
@@ -165,7 +165,7 @@ def distributed_main(local_rank, args):
         logging.info(vars(args))
     TrainSet, ValidSet = get_dataset(args)
     
-    device = f"cpu:{local_rank}"
+    device = f"mps:{local_rank}"
     args.gpu = local_rank
     
     tokenizer = AutoTokenizer.from_pretrained(args.backbone)
