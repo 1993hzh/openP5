@@ -174,7 +174,7 @@ class SingleRunner:
                 logging.info(f"The best validation at Epoch {best_epoch}")
         else:
             if self.rank == 0:
-                torch.save(self.model.module.state_dict(), self.args.model_path)
+                torch.save(self.model_module.state_dict(), self.args.model_path)
                 logging.info(f"Save the current model to {self.args.model_path}")
 
         return
@@ -273,7 +273,7 @@ class SingleRunner:
                 output_attention = batch[4].to(self.device)
                 user_idx = batch[5].to(self.device)
 
-                prediction = self.model.module.generate(
+                prediction = self.model_module.generate(
                     input_ids=input_ids,
                     attention_mask=attn,
                     whole_word_ids=whole_input_ids,
@@ -339,7 +339,7 @@ class SingleRunner:
                 )
                 prefix_allowed_tokens = gt.prefix_allowed_tokens_fn(candidate_trie)
 
-                prediction = self.model.module.generate(
+                prediction = self.model_module.generate(
                     input_ids=input_ids,
                     attention_mask=attn,
                     whole_word_ids=whole_input_ids,
@@ -396,7 +396,7 @@ class SingleRunner:
                 output_ids = batch[3].to(self.device)
                 output_attention = batch[4].to(self.device)
 
-                prediction = self.model.module.generate(
+                prediction = self.model_module.generate(
                     input_ids=input_ids,
                     attention_mask=attn,
                     whole_word_ids=whole_input_ids,
@@ -433,3 +433,10 @@ class SingleRunner:
 
             for i in range(len(self.metrics)):
                 logging.info(f'{self.metrics[i]}: {metrics_res[i]}')
+
+    @property
+    def model_module(self):
+        if hasattr(self.model, 'module'):
+            return self.model.module
+        else:
+            return self.model
