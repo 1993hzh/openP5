@@ -230,4 +230,5 @@ if __name__ == "__main__":
     if init_args.distributed and ngpus_per_node > 1:
         distributed_launch()
     else:
+        torch.set_default_tensor_type(torch.FloatTensor)  # Sets default to float32
         single_main()

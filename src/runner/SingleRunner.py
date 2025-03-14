@@ -30,7 +30,7 @@ class SingleRunner:
         parser.add_argument("--alpha", type=float, default=2)
         parser.add_argument("--train", type=int, default=1, help='train or not')
         parser.add_argument("--backbone", type=str, default='t5-small', help='backbone model name')
-        parser.add_argument("--metrics", type=str, default='hit@5,hit@10,ndcg@5,ndcg@10',
+        parser.add_argument("--metrics", type=str, default='hit@3,hit@5,hit@10,ndcg@3,ndcg@5,ndcg@10',
                             help='Metrics used for evaluation')
         parser.add_argument("--load", type=int, default=0, help='load model from model path or not.')
         parser.add_argument("--random_initialize", type=int, default=1,
@@ -305,8 +305,8 @@ class SingleRunner:
 
                 metrics_res += evaluate.get_metrics_results(rel_results, self.metrics)
 
-            metrics_res = torch.tensor(metrics_res).to(self.device)
-            test_total = torch.tensor(test_total).to(self.device)
+            metrics_res = torch.tensor(metrics_res, dtype=torch.float32).to(self.device)
+            test_total = torch.tensor(test_total, dtype=torch.float32).to(self.device)
 
             metrics_res /= test_total
 
@@ -367,8 +367,8 @@ class SingleRunner:
 
                 metrics_res += evaluate.get_metrics_results(rel_results, self.metrics)
 
-            metrics_res = torch.tensor(metrics_res).to(self.device)
-            test_total = torch.tensor(test_total).to(self.device)
+            metrics_res = torch.tensor(metrics_res, dtype=torch.float32).to(self.device)
+            test_total = torch.tensor(test_total, dtype=torch.float32).to(self.device)
 
             metrics_res /= test_total
 
@@ -426,8 +426,8 @@ class SingleRunner:
 
                 metrics_res += evaluate.get_metrics_results(rel_results, self.metrics)
 
-            metrics_res = torch.tensor(metrics_res).to(self.device)
-            test_total = torch.tensor(test_total).to(self.device)
+            metrics_res = torch.tensor(metrics_res, dtype=torch.float32).to(self.device)
+            test_total = torch.tensor(test_total, dtype=torch.float32).to(self.device)
 
             metrics_res /= test_total
 
