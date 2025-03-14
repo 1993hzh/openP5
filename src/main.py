@@ -228,7 +228,9 @@ if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = init_args.gpu
     ngpus_per_node = torch.cuda.device_count()
     if init_args.distributed and ngpus_per_node > 1:
+        print("Start distributed")
         distributed_launch()
     else:
+        print("Start single")
         torch.set_default_tensor_type(torch.FloatTensor)  # Sets default to float32
         single_main()
