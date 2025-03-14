@@ -47,7 +47,7 @@ def get_dataset(args):
 def get_loader(args, tokenizer, TrainSet, ValidSet, rank=0):
     
     # generate training validation loader.
-    ngpus_per_node = torch.mps.device_count()
+    ngpus_per_node = torch.cuda.device_count()
     if ngpus_per_node == 1:
         args.distributed = 0
     if args.dist_sampler == 0:
@@ -84,7 +84,7 @@ def single_main():
     
     args.rank = 0
     
-    device = torch.device("mps", int(args.gpu.split(',')[0]))
+    device = torch.device("cuda", int(args.gpu.split(',')[0]))
     
     
     logging.info(vars(args))
@@ -137,7 +137,7 @@ def distributed_launch():
     parser = DistributedRunner.parse_runner_args(parser)
     args, extras = parser.parse_known_args()
     
-    ngpus_per_node = torch.mps.device_count()
+    ngpus_per_node = torch.cuda.device_count()
     args.world_size = ngpus_per_node
     
     
@@ -154,7 +154,7 @@ def distributed_main(local_rank, args):
     utils.set_seed(args.seed)
     os.environ['MASTER_ADDR'] = args.master_addr
     os.environ['MASTER_PORT'] = args.master_port
-    torch.mps.set_device(local_rank)
+    torch.cuda.set_device(local_rank)
     dist.init_process_group(
         backend="nccl", world_size=args.world_size, rank=local_rank
     )
@@ -165,7 +165,7 @@ def distributed_main(local_rank, args):
         logging.info(vars(args))
     TrainSet, ValidSet = get_dataset(args)
     
-    device = f"mps:{local_rank}"
+    device = f"cuda:{local_rank}"
     args.gpu = local_rank
     
     tokenizer = AutoTokenizer.from_pretrained(args.backbone)
@@ -226,7 +226,7 @@ if __name__ == "__main__":
     parser = utils.parse_global_args(parser)
     init_args, extras = parser.parse_known_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = init_args.gpu
-    ngpus_per_node = torch.mps.device_count()
+    ngpus_per_node = torch.cuda.device_count()
     if init_args.distributed and ngpus_per_node > 1:
         distributed_launch()
     else:

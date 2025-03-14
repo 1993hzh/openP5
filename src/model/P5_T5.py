@@ -840,15 +840,15 @@ if __name__ == "__main__":
     print("finished loading data")
 
     config = T5Config.from_pretrained("t5-base")
-    model = P5_T5(config).mps()
+    model = P5_T5(config).cuda()
     print("finished building model")
 
     for batch in train_loader:
-        input_ids = batch[0].mps()
-        attn = batch[1].mps()
-        whole_input_ids = batch[2].mps()
-        output_ids = batch[3].mps()
-        output_attention = batch[4].mps()
+        input_ids = batch[0].cuda()
+        attn = batch[1].cuda()
+        whole_input_ids = batch[2].cuda()
+        output_ids = batch[3].cuda()
+        output_attention = batch[4].cuda()
 
         output = model(
             input_ids=input_ids,

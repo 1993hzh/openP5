@@ -245,7 +245,7 @@ class DistributedRunner(SingleRunner):
                     prediction_ids, skip_special_tokens=True
                 )
                 
-                rel_results = evaluate.rel_results_filtered(testloader.dataset.positive, testloader.dataset.id2user, user_idx.detach().mps().numpy(), \
+                rel_results = evaluate.rel_results_filtered(testloader.dataset.positive, testloader.dataset.id2user, user_idx.detach().cuda().numpy(), \
                                                             self.generate_num+testloader.dataset.max_positive, \
                                                             generated_sents, gold_sents, prediction_scores, self.generate_num)
                 

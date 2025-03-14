@@ -125,7 +125,7 @@ def save_model(model, path):
 def load_model(model, path, args, loc=None):
     if loc is None and hasattr(args, 'gpu'):
         gpuid = args.gpu.split(',')
-        loc = f'mps:{gpuid[0]}'
+        loc = f'cuda:{gpuid[0]}'
     state_dict = torch.load(path, map_location=loc)
     model.load_state_dict(state_dict, strict=False)
     return model
