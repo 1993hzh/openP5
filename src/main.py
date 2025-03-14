@@ -227,6 +227,7 @@ if __name__ == "__main__":
     init_args, extras = parser.parse_known_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = init_args.gpu
     ngpus_per_node = torch.cuda.device_count()
+    print(f"is distributed: {init_args.distributed}, ngpus_per_node: {ngpus_per_node}")
     if init_args.distributed and ngpus_per_node > 1:
         print("Start distributed")
         distributed_launch()
