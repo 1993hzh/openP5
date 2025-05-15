@@ -1,3 +1,5 @@
 .idea/
 !data/*/user_sequences.txt
 !data/*/README.md
+**/__pycache__/
+**/.DS_Store

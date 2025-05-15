@@ -1,6 +1,6 @@
 ts=500
 cluster=20
-for dataset in Steam LSC
+for dataset in Beauty Music Steam LSC
 do
     for indexing in random sequential collaborative
     do
